@@ -12,16 +12,13 @@
     <button id="update-progress-button">Update</button>
   </form>
   <script>
-    // Handle the form submission in the modal
     document.getElementById('update-progress-button').addEventListener('click', function () {
       const newPercentage = document.getElementById('percentage').value;
       if (newPercentage >= 0 && newPercentage <= 100) {
         const newDescription = `Progress: ${newPercentage}%`;
-        TrelloPowerUp.get('card', 'desc')
-          .then(function (desc) {
-            const cardData = JSON.parse(desc);
-            cardData.description = newDescription;
-            TrelloPowerUp.set('card', 'desc', JSON.stringify(cardData))
+        TrelloPowerUp.get('card', 'id')
+          .then(function (card) {
+            Trello.put(`/1/cards/${card.id}/desc`, { value: newDescription })
               .then(function () {
                 TrelloPowerUp.closeModal();
               });
