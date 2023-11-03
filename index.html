@@ -10,29 +10,55 @@
   <script>
     TrelloPowerUp.initialize({
       'card-badges': function (t, options) {
-        return [
-          {
-            icon: "https://i.ibb.co/6sbknH0/logo-stroke-32pt-style-2-no-stroke.png",
-            text: 'Hello World',
-            color: 'green',
-            callback: function (t) {
-              openProgressModal(t);
-            }
+        const cardData = t.card('name', 'due', 'badges');
+        const badgeText = getProgressBadge(cardData.badges);
+        return [{
+          icon: badgeText ? null : 'https://i.ibb.co/6sbknH0/logo-stroke-32pt-style-2-no-stroke.png',
+          text: badgeText || 'Hello World',
+          color: badgeText ? 'green' : null,
+          callback: function (t) {
+            openProgressModal(t);
           }
-        ];
+        }];
       },
     });
 
+    function getProgressBadge(badges) {
+      // You can customize this function to determine the progress.
+      // Here, we assume the "progress" is stored in the card's description.
+      const description = badges ? badges.description : '';
+      const match = description.match(/Progress: (\d+)%/);
+      if (match) {
+        const progress = parseInt(match[1], 10);
+        if (!isNaN(progress)) {
+          return `${progress}%`;
+        }
+      }
+      return null;
+    }
+
     function openProgressModal(t) {
       t.modal({
-        url: 'progress_modal.html',
-        height: 150,
+        url: 'progress_modal.html', // Replace with the URL of your progress modal HTML file.
+        height: 300, // Adjust the height as needed.
         args: {
           cardId: t.getContext().card,
         },
       });
     }
   </script>
+  <style>
+    .badge-progress-bar {
+      display: block;
+      width: 100%;
+      background-color: #e0e0e0;
+    }
+
+    .badge-progress-fill {
+      height: 100%;
+      background-color: #61bd4f;
+    }
+  </style>
 </body>
 
 </html>
