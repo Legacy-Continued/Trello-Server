@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+  <form id="progress-form">
+    <label for="percentage">Enter Percentage:</label>
+    <input type="number" id="percentage" min="0" max="100" required>
+    <button id="update-progress-button">Update</button>
+  </form>
+  <script>
+    // Handle the form submission in the modal
+    document.getElementById('update-progress-button').addEventListener('click', function () {
+      const newPercentage = document.getElementById('percentage').value;
+      if (newPercentage >= 0 && newPercentage <= 100) {
+        const newDescription = `Progress: ${newPercentage}%`;
+        TrelloPowerUp.get('card', 'desc')
+          .then(function (desc) {
+            const cardData = JSON.parse(desc);
+            cardData.description = newDescription;
+            TrelloPowerUp.set('card', 'desc', JSON.stringify(cardData))
+              .then(function () {
+                TrelloPowerUp.closeModal();
+              });
+          });
+      }
+    });
+  </script>
+</body>
+
+</html>
