@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta charset="utf-8">
+    <title>Trello-like Task Card</title>
+    <style>
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            padding: 10px;
+            margin: 10px;
+            width: 300px;
+        }
+
+        .card-header {
+            font-weight: bold;
+        }
+
+        .button-container {
+            margin-top: 10px;
+        }
+
+        .progress-button {
+            background-color: #3498db;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-
 <body>
-  <script src="https://p.trellocdn.com/power-up.min.js"></script>
-  <script>
-    TrelloPowerUp.initialize({
-      'card-buttons': function (t, options) {
-        return [
-          {
-            icon: "https://i.ibb.co/6sbknH0/logo-stroke-32pt-style-2-no-stroke.png",
-            text: 'Set Progress',
-            callback: function (t) {
-              openProgressModal(t);
-            }
-          }
-        ];
-      },
-    });
+    <div class="card">
+        <div class="card-header">Task Title</div>
+        <div class="card-description">
+            This is a description of the task. You can add more details here.
+        </div>
+        <div class="button-container">
+            <button class="progress-button">0%</button>
+        </div>
+    </div>
 
-    function openProgressModal(t) {
-      t.modal({
-        url: 'progress_modal.html',
-        height: 150,
-        args: {
-          cardId: t.getContext().card,
-        },
-      });
-    }
-  </script>
+    <script>
+        // JavaScript code for handling the progress button
+        const progressButton = document.querySelector('.progress-button');
+
+        let progress = 0;
+
+        progressButton.addEventListener('click', () => {
+            progress = (progress + 25) % 101; // Increment progress by 25%, loop back to 0 after 100%
+            progressButton.textContent = progress + '%';
+        });
+    </script>
 </body>
-
 </html>
